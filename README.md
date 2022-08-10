@@ -3,6 +3,7 @@ ODS MLOPS project
 
 Repo is created to study technics and best practices of making research work.
 
+Template of the project is done with cookiecutter library
 Project Organization
 ------------
 
