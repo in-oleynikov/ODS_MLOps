@@ -2,5 +2,5 @@
 MODEL = prajjwal1/bert-tiny
 BATCH_SIZE = 8
 num_warmup_steps = 0
-num_train_epochs = 3
+num_train_epochs = 6
 output_dir = ./models
