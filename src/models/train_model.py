@@ -23,4 +23,4 @@ BATCH_SIZE = os.getenv("BATCH_SIZE")
 train_dataloader = make_dataloader(BATCH_SIZE, "train")
 eval_dataloader = make_dataloader(BATCH_SIZE, "validation")
 
-print(train_dataloader)
+
