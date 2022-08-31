@@ -1,6 +1,6 @@
 name: Pylint
 
-on: [push]
+on: [push,merge]
 env:
   PIP_CACHE_DIR: "/$CI_PROJECT_DIR/.cache/pip"
 
