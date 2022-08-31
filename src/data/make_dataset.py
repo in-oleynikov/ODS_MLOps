@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import configparser
-
+import numpy as np
 from datasets import load_dataset
 from torch.utils.data import DataLoader
 from transformers import AutoTokenizer
@@ -70,7 +70,7 @@ def make_dataloader(batch_size, data_type="train"):
     return dataloader
 
 
-def postprocess(predictions, labels):
+def postprocess(predictions: np.array, labels: np.array):
     predictions = predictions.detach().cpu().clone().numpy()
     labels = labels.detach().cpu().clone().numpy()
 
