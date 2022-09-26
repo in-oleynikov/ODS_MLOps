@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.9"
 transformers = "^4.22.1"
-pytorch = "^1.0.2"
+datasets = "^2.5.1"
 
 
 [build-system]
