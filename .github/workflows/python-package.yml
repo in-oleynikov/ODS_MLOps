@@ -28,9 +28,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Lint with flake8
       uses: py-actions/flake8@v2
-        with:
-          max-line-length: "87"
-          path: "app"
+      with:
+        max-line-length: "87"
+        path: "ODS_MLOps_project"
       #run: |
         # stop the build if there are Python syntax errors or undefined names
       #  flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
