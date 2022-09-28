@@ -1,0 +1,8 @@
+[core]
+    remote = remote
+    autostage = true
+['remote "remote"']
+    url=s3://dvc
+    endpointurl = https://storage.yandexcloud.net
+    access_key_id = YCAJEp8aCSN0KJMMJSp3nhbg_
+    secret_access_key = YCAJEp8aCSN0KJMMJSp3nhbg_
