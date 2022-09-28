@@ -6,7 +6,6 @@ from transformers import DataCollatorForTokenClassification
 from torch.utils.data import DataLoader
 
 
-
 def make_dataloader(input_path, model_checkpoint, batch_size, data_type="train"):
     tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
     data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
@@ -21,7 +20,5 @@ def make_dataloader(input_path, model_checkpoint, batch_size, data_type="train")
     return dataloader
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     fire.Fire(make_dataloader)
-
-
