@@ -12,6 +12,7 @@ transformers = "^4.22.1"
 datasets = "^2.5.1"
 black = "^22.8.0"
 dvc = "^2.27.2"
+dvc-s3 = "^2.20.1"
 
 
 [build-system]
