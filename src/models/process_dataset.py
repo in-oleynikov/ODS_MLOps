@@ -20,5 +20,5 @@ def make_dataloader(input_path, model_checkpoint, batch_size, data_type="train")
     return dataloader
 
 
-if __name__ == "__main__":
-    fire.Fire(make_dataloader)
+# if __name__ == "__main__":
+#     fire.Fire(make_dataloader)
