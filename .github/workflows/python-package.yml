@@ -6,6 +6,7 @@ name: Python package
 on:
   push:
     branches: 
+    branches:
     - '*'
     - '!main'
   pull_request:
@@ -18,14 +19,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9"]
-
+        python-version: ["3.8"]
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        poetry install 
+        poetry add flake8
     - name: Lint with flake8
       uses: py-actions/flake8@v2
       with:
