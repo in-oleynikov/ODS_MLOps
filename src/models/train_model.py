@@ -31,6 +31,7 @@ def train_model(input_path, output_path):
 
     print("Dataloaders loaded")
 
+
     id2label = {str(i): label for i, label in enumerate(label_names)}
     label2id = {v: k for k, v in id2label.items()}
     model = AutoModelForTokenClassification.from_pretrained(
