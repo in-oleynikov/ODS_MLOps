@@ -22,8 +22,12 @@ num_warmup_steps = 0
 
 
 def train_model(input_path, output_path):
-    train_dataloader = make_dataloader(input_path, MODEL_CHECKPOINT, BATCH_SIZE, "train")
-    eval_dataloader = make_dataloader(input_path, MODEL_CHECKPOINT, BATCH_SIZE, "validation")
+    train_dataloader = make_dataloader(
+        input_path, MODEL_CHECKPOINT, BATCH_SIZE, "train"
+    )
+    eval_dataloader = make_dataloader(
+        input_path, MODEL_CHECKPOINT, BATCH_SIZE, "validation"
+    )
 
     print("Dataloaders loaded")
 
@@ -41,7 +45,8 @@ def train_model(input_path, output_path):
     accelerator = Accelerator()
 
     model, optimizer, train_dataloader, eval_dataloader = accelerator.prepare(
-        model, optimizer, train_dataloader, eval_dataloader)
+        model, optimizer, train_dataloader, eval_dataloader
+    )
 
     num_update_steps_per_epoch = len(train_dataloader)
     num_training_steps = num_train_epochs * num_update_steps_per_epoch
@@ -55,20 +60,10 @@ def train_model(input_path, output_path):
     progress_bar = tqdm(range(num_training_steps))
 
     trainer = Trainer(
-        model,
-        tokenizer,
-        accelerator,
-        optimizer,
-        lr_scheduler,
-        progress_bar
+        model, tokenizer, accelerator, optimizer, lr_scheduler, progress_bar
     )
-    trainer.train_loop(
-        train_dataloader,
-        eval_dataloader,
-        num_train_epochs,
-        output_path
-    )
+    trainer.train_loop(train_dataloader, eval_dataloader, num_train_epochs, output_path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     fire.Fire(train_model)

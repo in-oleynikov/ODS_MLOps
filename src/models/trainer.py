@@ -11,7 +11,7 @@ BATCH_SIZE = os.getenv("BATCH_SIZE")
 
 class Trainer:
     def __init__(
-            self, model, tokenizer, accelerator, optimizer, lr_scheduler, progress_bar
+        self, model, tokenizer, accelerator, optimizer, lr_scheduler, progress_bar
     ) -> None:
         self.model = model
         self.tokenizer = tokenizer
@@ -59,11 +59,11 @@ class Trainer:
             self.metric.add_batch(predictions=true_predictions, references=true_labels)
 
     def train_loop(
-            self,
-            train_dataloader,
-            eval_dataloader,
-            num_train_epochs,
-            output_path,
+        self,
+        train_dataloader,
+        eval_dataloader,
+        num_train_epochs,
+        output_path,
     ):
 
         for epoch in range(num_train_epochs):
@@ -75,7 +75,7 @@ class Trainer:
             print(
                 f"epoch {epoch}:",
                 {
-                    key: results[f"overall_{key}"].astype('float32')
+                    key: results[f"overall_{key}"].astype("float32")
                     for key in ["precision", "recall", "f1", "accuracy"]
                 },
             )
@@ -89,5 +89,5 @@ class Trainer:
             )
             if self.accelerator.is_main_process:
                 self.tokenizer.save_pretrained(output_path)
-        with open(os.path.join(output_path, f"results_{now}.json"), 'w') as file:
+        with open(os.path.join(output_path, f"results_{now}.json"), "w") as file:
             json.dump(results, file)
