@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os.path
+
 import fire
 from datasets import load_from_disk
 from transformers import AutoTokenizer
@@ -58,6 +60,8 @@ def make_dataset(input_path, output_path):
         batched=True,
         remove_columns=raw_datasets["train"].column_names,
     )
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
     tokenized_datasets.save_to_disk(output_path)
 
 

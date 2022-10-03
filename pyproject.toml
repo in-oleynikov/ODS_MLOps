@@ -14,6 +14,9 @@ black = "^22.8.0"
 dvc = "^2.27.2"
 dvc-s3 = "^2.20.1"
 fire = "^0.4.0"
+accelerate = "^0.12.0"
+evaluate = "^0.2.2"
+seqeval = "^1.2.2"
 
 
 [build-system]

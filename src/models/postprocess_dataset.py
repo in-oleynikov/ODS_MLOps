@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
-import fire
-from datasets import load_from_disk
-from transformers import AutoTokenizer
-from transformers import DataCollatorForTokenClassification
-import configparser
 
-
-def postprocess(predictions: np.array, labels: np.array, labelnames):
+import numpy as np
+from src.data.data_utils import label_names
+def postprocess(predictions: np.array, labels: np.array):
     predictions = predictions.detach().cpu().clone().numpy()
     labels = labels.detach().cpu().clone().numpy()
 
