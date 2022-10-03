@@ -1,0 +1,5 @@
+outs:
+- md5: 253e707ff60adb90ab9958d54e470a28.dir
+  size: 23601499
+  nfiles: 17
+  path: conll

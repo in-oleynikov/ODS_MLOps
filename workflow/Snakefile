@@ -1,0 +1,7 @@
+rule prepare_dataset:
+    input:
+        "/data/raw/"
+    output:
+        "/data/processed/"
+    shell:
+        "python src/data/make_dataset.py {input} {output}"
