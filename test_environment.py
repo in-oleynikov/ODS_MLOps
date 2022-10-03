@@ -3,6 +3,8 @@ import sys
 REQUIRED_PYTHON = "python3"
 
 
+
+
 def main():
     system_major = sys.version_info.major
     if REQUIRED_PYTHON == "python":

@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "mlops"
+version = "0.1.0"
+description = "NER project with advanced mlops technics"
+authors = ["iva-nko <iva_nko@mail.ru>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+transformers = "^4.22.1"
+datasets = "^2.5.1"
+black = "^22.8.0"
+dvc = "^2.27.2"
+dvc-s3 = "^2.20.1"
+fire = "^0.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
