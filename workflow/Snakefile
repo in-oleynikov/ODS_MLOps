@@ -1,7 +1,19 @@
+import datetime
+rule all:
+    output:
+        f"src/models/results/results_{datetime.datetime.now()}"
 rule prepare_dataset:
     input:
-        "/data/raw/"
+        "data/raw/conll/"
     output:
-        "/data/processed/"
+        "data/processed/conll"
     shell:
-        "python src/data/make_dataset.py {input} {output}"
+        "python -m src.data.make_dataset {input} {output}"
+
+rule train_model:
+    input:
+        "data/processed/conll"
+    output:
+        f"src/models/results/results_{datetime.datetime.now()}"
+    shell:
+        "python -m src.models.train_model {input} {output}"

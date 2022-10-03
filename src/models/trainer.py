@@ -1,39 +1,29 @@
 # -*- coding: utf-8 -*-
 import os
-
-from datasets import load_dataset
-
-from transformers import AutoTokenizer
-from transformers import DataCollatorForTokenClassification
+import datetime
 import evaluate
-from transformers import AutoModelForTokenClassification
-from transformers import TrainingArguments
-from transformers import Trainer
-from torch.utils.data import DataLoader
-from torch.optim import AdamW
-from accelerate import Accelerator
-from transformers import get_scheduler
-from tqdm.auto import tqdm
 import torch
-from transformers import pipeline
-from process_dataset import make_dataloader
-from src.data.make_dataset import make_dataloader
+import json
+from src.models.postprocess_dataset import postprocess
 
 BATCH_SIZE = os.getenv("BATCH_SIZE")
-train_dataloader = make_dataloader(BATCH_SIZE, "train")
-eval_dataloader = make_dataloader(BATCH_SIZE, "validation")
 
-class Trainer():
-    def __int__(self, model, accelerator, optimizer, lr_scheduler, progress_bar):
+
+class Trainer:
+    def __init__(
+        self, model, tokenizer, accelerator, optimizer, lr_scheduler, progress_bar
+    ) -> None:
         self.model = model
+        self.tokenizer = tokenizer
         self.accelerator = accelerator
         self.optimizer = optimizer
         self.lr_scheduler = lr_scheduler
         self.progress_bar = progress_bar
+        self.metric = evaluate.load("seqeval")
 
-    def train_epoch(self):
+    def train_epoch(self, dataloader):
         self.model.train()
-        for batch in train_dataloader:
+        for batch in dataloader:
             outputs = self.model(**batch)
             loss = outputs.loss
             self.accelerator.backward(loss)
@@ -43,10 +33,9 @@ class Trainer():
             self.optimizer.zero_grad()
             self.progress_bar.update(1)
 
-    def validate_epoch(self, ):
+    def validate_epoch(self, dataloader):
         self.model.eval()
-
-        for batch in eval_dataloader:
+        for batch in dataloader:
             with torch.no_grad():
                 outputs = self.model(**batch)
 
@@ -54,41 +43,51 @@ class Trainer():
             labels = batch["labels"]
 
             # Necessary to pad predictions and labels for being gathered
-            predictions = self.accelerator.pad_across_processes(predictions, dim=1, pad_index=-100)
-            labels = self.accelerator.pad_across_processes(labels, dim=1, pad_index=-100)
+            predictions = self.accelerator.pad_across_processes(
+                predictions, dim=1, pad_index=-100
+            )
+            labels = self.accelerator.pad_across_processes(
+                labels, dim=1, pad_index=-100
+            )
 
             predictions_gathered = self.accelerator.gather(predictions)
             labels_gathered = self.accelerator.gather(labels)
 
-            true_predictions, true_labels = postprocess(predictions_gathered, labels_gathered)
-            metric.add_batch(predictions=true_predictions, references=true_labels)
+            true_predictions, true_labels = postprocess(
+                predictions_gathered, labels_gathered
+            )
+            self.metric.add_batch(predictions=true_predictions, references=true_labels)
 
-        return metric
+    def train_loop(
+        self,
+        train_dataloader,
+        eval_dataloader,
+        num_train_epochs,
+        output_path,
+    ):
 
-    def train_loop(self,):
-        lr_scheduler = get_scheduler(
-            "linear",
-            optimizer=optimizer,
-            num_warmup_steps=num_warmup_steps,
-            num_training_steps=num_training_steps,
-        )
-        progress_bar = tqdm(range(num_training_steps))
         for epoch in range(num_train_epochs):
-            self.train_epoch()
-            self.validate_epoch()
+            self.train_epoch(train_dataloader)
+            self.validate_epoch(eval_dataloader)
 
-        results = metric.compute()
-        print(
-            f"epoch {epoch}:",
-            {
-                key: results[f"overall_{key}"]
-                for key in ["precision", "recall", "f1", "accuracy"]
-            },
-        )
+            results = self.metric.compute()
 
-        #     # Save and upload
-        accelerator.wait_for_everyone()
-        unwrapped_model = accelerator.unwrap_model(model)
-        unwrapped_model.save_pretrained(output_dir + f'/epoch_{epoch}', save_function=accelerator.save)
-        if accelerator.is_main_process:
-            tokenizer.save_pretrained(output_dir)
+            print(
+                f"epoch {epoch}:",
+                {
+                    key: results[f"overall_{key}"].astype("float32")
+                    for key in ["precision", "recall", "f1", "accuracy"]
+                },
+            )
+            now = datetime.datetime.now()
+
+            #     # Save and upload
+            self.accelerator.wait_for_everyone()
+            unwrapped_model = self.accelerator.unwrap_model(self.model)
+            unwrapped_model.save_pretrained(
+                output_path + f"/epoch_{epoch}", save_function=self.accelerator.save
+            )
+            if self.accelerator.is_main_process:
+                self.tokenizer.save_pretrained(output_path)
+        with open(os.path.join(output_path, f"results_{now}.json"), "w") as file:
+            json.dump(results, file)

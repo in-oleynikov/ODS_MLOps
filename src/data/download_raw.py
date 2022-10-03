@@ -7,5 +7,5 @@ def save_dataset(path: str):
     raw_datasets.save_to_disk(path)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     fire.Fire(save_dataset)
