@@ -9,17 +9,14 @@ from src.models.process_dataset import make_dataloader
 from src.data.data_utils import label_names
 from tqdm import tqdm
 from transformers import get_scheduler
+from src.config import configs
 
-BATCH_SIZE = os.getenv("BATCH_SIZE")
-BATCH_SIZE = 8
-MODEL_CHECKPOINT = os.getenv("MODEL")
-MODEL_CHECKPOINT = "prajjwal1/bert-tiny"
 
-LEARNING_RATE = os.getenv("LEARNING_RATE")
-LEARNING_RATE = 2e-5
-num_train_epochs = 2
-num_warmup_steps = 0
-
+BATCH_SIZE = configs['model']['BATCH_SIZE']
+MODEL_CHECKPOINT = configs['model']['MODEL_CHECKPOINT']
+LEARNING_RATE = configs['model']['LEARNING_RATE']
+num_train_epochs = configs['model']['num_train_epochs']
+num_warmup_steps = configs['model']['num_warmup_steps']
 
 def train_model(input_path, output_path):
     train_dataloader = make_dataloader(
