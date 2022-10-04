@@ -7,9 +7,9 @@ from transformers import AutoTokenizer
 from transformers import DataCollatorForTokenClassification
 import configparser
 
-# model_checkpoint = config["DEFAULT"]["MODEL"]
+# model_checkpoint = config.yaml["DEFAULT"]["MODEL"]
 config = configparser.ConfigParser()
-config.read("../config")
+config.read("../config.yaml")
 model_checkpoint = "prajjwal1/bert-tiny"
 
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
