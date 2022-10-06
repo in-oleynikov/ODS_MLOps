@@ -5,13 +5,9 @@ import fire
 from datasets import load_from_disk
 from transformers import AutoTokenizer
 from transformers import DataCollatorForTokenClassification
-import configparser
+from src.config import configs
 
-# model_checkpoint = config.yaml["DEFAULT"]["MODEL"]
-config = configparser.ConfigParser()
-config.read("../config.yaml")
-model_checkpoint = "prajjwal1/bert-tiny"
-
+model_checkpoint = configs['model']['MODEL_CHECKPOINT']
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
 
