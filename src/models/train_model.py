@@ -11,14 +11,14 @@ from tqdm import tqdm
 from transformers import get_scheduler
 from src.config import configs
 
+BATCH_SIZE = configs["model"]["BATCH_SIZE"]
+MODEL_CHECKPOINT = configs["model"]["MODEL_CHECKPOINT"]
+LEARNING_RATE = float(configs["model"]["LEARNING_RATE"])
+num_train_epochs = configs["model"]["num_train_epochs"]
+num_warmup_steps = configs["model"]["num_warmup_steps"]
 
-BATCH_SIZE = configs['model']['BATCH_SIZE']
-MODEL_CHECKPOINT = configs['model']['MODEL_CHECKPOINT']
-LEARNING_RATE = configs['model']['LEARNING_RATE']
-num_train_epochs = configs['model']['num_train_epochs']
-num_warmup_steps = configs['model']['num_warmup_steps']
 
-def train_model(input_path, output_path):
+def train_model(input_path, output_model_path, results_path):
     train_dataloader = make_dataloader(
         input_path, MODEL_CHECKPOINT, BATCH_SIZE, "train"
     )
@@ -27,7 +27,6 @@ def train_model(input_path, output_path):
     )
 
     print("Dataloaders loaded")
-
 
     id2label = {str(i): label for i, label in enumerate(label_names)}
     label2id = {v: k for k, v in id2label.items()}
@@ -60,7 +59,13 @@ def train_model(input_path, output_path):
     trainer = Trainer(
         model, tokenizer, accelerator, optimizer, lr_scheduler, progress_bar
     )
-    trainer.train_loop(train_dataloader, eval_dataloader, num_train_epochs, output_path)
+    trainer.train_loop(
+        train_dataloader,
+        eval_dataloader,
+        num_train_epochs,
+        output_model_path,
+        results_path,
+    )
 
 
 if __name__ == "__main__":
