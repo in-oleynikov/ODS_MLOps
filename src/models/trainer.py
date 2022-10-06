@@ -6,8 +6,6 @@ import torch
 import json
 from src.models.postprocess_dataset import postprocess
 
-BATCH_SIZE = os.getenv("BATCH_SIZE")
-
 
 class Trainer:
     def __init__(

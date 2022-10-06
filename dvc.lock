@@ -1,0 +1,17 @@
+schema: '2.0'
+stages:
+  process_dataset:
+    cmd: python -m src.data.make_dataset data/raw/conll data/processed/conll
+    deps:
+    - path: data/raw/conll
+      md5: e8b6c6db3daba108dbf66f51bed79fb0.dir
+      size: 31743835
+      nfiles: 22
+    - path: src/data/make_dataset.py
+      md5: f4f20a0447e1f09c91d14b7a24794ba1
+      size: 1981
+    outs:
+    - path: data/processed/conll
+      md5: c3f23421d1c02f2ad27c2c54b2ab9182.dir
+      size: 6160035
+      nfiles: 10

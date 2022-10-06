@@ -1,0 +1,18 @@
+stages:
+  process_dataset:
+    cmd: python -m src.data.make_dataset data/raw/conll data/processed/conll
+    deps:
+      - data/raw/conll
+      - src/data/make_dataset.py
+    outs:
+      - data/processed/conll
+  train:
+    cmd: python src/featurization.py data/prepared data/features
+    deps:
+      - data/prepared
+      - src/featurization.py
+    params:
+      - featurize.max_features
+      - featurize.ngrams
+    outs:
+      - data/features
