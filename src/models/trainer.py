@@ -82,11 +82,11 @@ class Trainer:
             self.accelerator.wait_for_everyone()
         unwrapped_model = self.accelerator.unwrap_model(self.model)
         unwrapped_model.save_pretrained(
-            os.path.join(output_model_path, "last_epoch"),
+            os.path.join(output_model_path),
             save_function=self.accelerator.save,
         )
         if self.accelerator.is_main_process:
-            self.tokenizer.save_pretrained(output_model_path)
+            self.tokenizer.save_pretrained(os.path.join(output_model_path))
         with open(results_path, "w") as file:
             self.change_dtype(results)
             json.dump(results, file)

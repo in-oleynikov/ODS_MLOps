@@ -7,11 +7,12 @@ stages:
     outs:
       - data/processed/conll
   train:
-    cmd: python -m src.models.train_model data/processed/conll models reports/metrics.json
+    cmd: python -m src.models.train_model data/processed/conll models/last_epoch reports/metrics.json
     deps:
       - data/processed/conll
       - src/models/train_model.py
-      - models
+    outs:
+      - models/last_epoch
     metrics:
       - reports/metrics.json
 #  test:
