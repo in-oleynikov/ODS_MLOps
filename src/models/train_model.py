@@ -13,8 +13,9 @@ from transformers import get_scheduler
 from src.config import configs
 from mlflow import log_params
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
-
+mlflow.set_tracking_uri("https://dagshub.com/in-oleynikov/ODS_MLOps_project.mlflow")
+os.environ['MLFLOW_TRACKING_USERNAME'] = 'in-oleynikov'
+os.environ['MLFLOW_TRACKING_PASSWORD'] = '93c29f4de63a36013e97b2106ce6e02eb8247811'
 mlflow.set_experiment("NER_pytorch")
 mlflow.pytorch.autolog()
 

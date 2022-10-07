@@ -110,5 +110,5 @@ class Trainer:
         log_artifact(output_model_path)
         mlflow.pytorch.log_model(
             pytorch_model=unwrapped_model,
-            # artifact_path=output_model_path,
+            artifact_path=output_model_path,
         )
