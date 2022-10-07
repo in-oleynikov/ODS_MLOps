@@ -6,6 +6,10 @@ import torch
 import json
 from src.models.postprocess_dataset import postprocess
 import numpy as np
+from mlflow import log_metrics, log_artifact
+import mlflow
+
+mlflow.autolog()
 
 class Trainer:
     def __init__(
@@ -55,14 +59,23 @@ class Trainer:
             )
             self.metric.add_batch(predictions=true_predictions, references=true_labels)
 
+
+
+    def transform_metrics(self, results: dict) -> dict:
+        output = {}
+        for k, v in results.items():
+            if isinstance(v, dict):
+                for m, n in v.items():
+                    output[f'{k}_{m}'] = n
+            else:
+                output[k] = v
+        return output
+
     def change_dtype(self, results: dict) -> dict:
         if isinstance(results, dict):
             for k, v in results.items():
-                if isinstance(v, dict):
-                    for m, n in v.items():
-                        if type(n) == np.int64:
-                            results[k][m] = int(n)
-
+                if type(v) == np.int64:
+                    results[k] = int(v)
     def train_loop(
         self,
         train_dataloader,
@@ -77,16 +90,25 @@ class Trainer:
             self.validate_epoch(eval_dataloader)
 
             results = self.metric.compute()
-            print(results)
             #     # Save and upload
             self.accelerator.wait_for_everyone()
         unwrapped_model = self.accelerator.unwrap_model(self.model)
         unwrapped_model.save_pretrained(
-            os.path.join(output_model_path, "last_epoch"),
+            os.path.join(output_model_path),
             save_function=self.accelerator.save,
         )
         if self.accelerator.is_main_process:
-            self.tokenizer.save_pretrained(output_model_path)
+            self.tokenizer.save_pretrained(os.path.join(output_model_path))
+
+        results = self.transform_metrics(results)
+
+        log_metrics(results)
+
         with open(results_path, "w") as file:
             self.change_dtype(results)
             json.dump(results, file)
+        log_artifact(output_model_path)
+        mlflow.pytorch.log_model(
+            pytorch_model=unwrapped_model,
+            # artifact_path=output_model_path,
+        )

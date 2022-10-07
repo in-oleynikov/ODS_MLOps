@@ -16,20 +16,28 @@ stages:
       size: 6160035
       nfiles: 10
   train:
-    cmd: python -m src.models.train_model data/processed/conll models reports/metrics.json
+    cmd: python -m src.models.train_model data/processed/conll models/last_epoch reports/metrics.json
     deps:
     - path: data/processed/conll
       md5: c3f23421d1c02f2ad27c2c54b2ab9182.dir
       size: 6160035
       nfiles: 10
-    - path: models
-      md5: 8bf9e8135cca4f7077cc353608bd7f4d.dir
-      size: 88452560
-      nfiles: 15
     - path: src/models/train_model.py
-      md5: 000405e0a12fcce264a6f387d36b29c2
-      size: 2265
+      md5: a22fafe059604ceb7603f760fcf67f0b
+      size: 2450
+    params:
+      src/params.yaml:
+        model:
+          MODEL_CHECKPOINT: prajjwal1/bert-tiny
+          BATCH_SIZE: 16
+          num_warmup_steps: 4
+          num_train_epochs: 3
+          LEARNING_RATE: 2e-05
     outs:
+    - path: models/last_epoch
+      md5: 39e2d688433c29c7789847d29b0ee19f.dir
+      size: 18443136
+      nfiles: 6
     - path: reports/metrics.json
-      md5: c58ecc2b043d45a37620c301ceba1a52
-      size: 605
+      md5: f7438ae4d74ee2830a0a1427915b444c
+      size: 639
