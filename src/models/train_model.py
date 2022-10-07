@@ -10,13 +10,24 @@ from src.data.data_utils import label_names
 from tqdm import tqdm
 from transformers import get_scheduler
 from src.config import configs
+from mlflow import log_param
+import mlflow
+
 
 BATCH_SIZE = configs["model"]["BATCH_SIZE"]
-MODEL_CHECKPOINT = configs["model"]["MODEL_CHECKPOINT"]
-LEARNING_RATE = float(configs["model"]["LEARNING_RATE"])
-num_train_epochs = configs["model"]["num_train_epochs"]
-num_warmup_steps = configs["model"]["num_warmup_steps"]
+log_param("BATCH_SIZE", BATCH_SIZE)
 
+MODEL_CHECKPOINT = configs["model"]["MODEL_CHECKPOINT"]
+log_param("MODEL_CHECKPOINT", MODEL_CHECKPOINT)
+
+LEARNING_RATE = float(configs["model"]["LEARNING_RATE"])
+log_param("LEARNING_RATE", LEARNING_RATE)
+
+num_train_epochs = configs["model"]["num_train_epochs"]
+log_param("num_train_epochs", num_train_epochs)
+
+num_warmup_steps = configs["model"]["num_warmup_steps"]
+log_param("num_warmup_steps", num_warmup_steps)
 
 def train_model(input_path, output_model_path, results_path):
     train_dataloader = make_dataloader(

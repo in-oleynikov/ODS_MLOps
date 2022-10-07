@@ -19,6 +19,7 @@ evaluate = "^0.2.2"
 seqeval = "^1.2.2"
 mlflow = "^1.29.0"
 PyYAML = "^6.0"
+pytorch-lightning = "1.7.6"
 
 
 [build-system]
