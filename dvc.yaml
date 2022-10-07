@@ -11,12 +11,8 @@ stages:
     deps:
       - data/processed/conll
       - src/models/train_model.py
-#    params:
-#      - config.MODEL_CHECKPOINT: prajjwal1/bert-tiny
-#      - config.BATCH_SIZE: 16
-#      - config.num_warmup_steps: 4
-#      - config.num_train_epochs: 5
-#      - config.LEARNING_RATE: 2e-5
+    params:
+      - src/params.yaml:
     outs:
       - models/last_epoch
     metrics:

@@ -23,13 +23,21 @@ stages:
       size: 6160035
       nfiles: 10
     - path: src/models/train_model.py
-      md5: 8e8585a423c37ed64dd081dba9f1dae6
-      size: 2534
+      md5: a22fafe059604ceb7603f760fcf67f0b
+      size: 2450
+    params:
+      src/params.yaml:
+        model:
+          MODEL_CHECKPOINT: prajjwal1/bert-tiny
+          BATCH_SIZE: 16
+          num_warmup_steps: 4
+          num_train_epochs: 3
+          LEARNING_RATE: 2e-05
     outs:
     - path: models/last_epoch
-      md5: dc07816e6be795b46b6ab2204b08bdf0.dir
+      md5: 39e2d688433c29c7789847d29b0ee19f.dir
       size: 18443136
       nfiles: 6
     - path: reports/metrics.json
-      md5: 07dd62e5c365eb576a677cbdd3e74864
-      size: 631
+      md5: f7438ae4d74ee2830a0a1427915b444c
+      size: 639

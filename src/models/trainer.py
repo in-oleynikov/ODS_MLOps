@@ -6,10 +6,10 @@ import torch
 import json
 from src.models.postprocess_dataset import postprocess
 import numpy as np
-from mlflow import log_metric, log_artifact
+from mlflow import log_metrics, log_artifact
 import mlflow
 
-mlflow.pytorch.autolog()
+mlflow.autolog()
 
 class Trainer:
     def __init__(
@@ -101,10 +101,14 @@ class Trainer:
             self.tokenizer.save_pretrained(os.path.join(output_model_path))
 
         results = self.transform_metrics(results)
-        for metric, value in results.items():
-            log_metric(metric, value)
+
+        log_metrics(results)
 
         with open(results_path, "w") as file:
             self.change_dtype(results)
             json.dump(results, file)
-        log_artifact(results_path)
+        log_artifact(output_model_path)
+        mlflow.pytorch.log_model(
+            pytorch_model=unwrapped_model,
+            # artifact_path=output_model_path,
+        )
