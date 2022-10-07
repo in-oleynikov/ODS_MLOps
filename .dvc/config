@@ -1,0 +1,9 @@
+[core]
+    remote = remote
+    autostage = true
+['remote "remote"']
+    url = s3://mlops-iva-nko
+    endpointurl = https://storage.yandexcloud.net
+    access_key_id = YCAJE4LphKfxdWrHhX2z4d71b
+    secret_access_key = YCNyz8geFVJwZ1Zb-EELNaxnSKX2Er4fz7RtcRT6
+
