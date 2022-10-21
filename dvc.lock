@@ -23,8 +23,8 @@ stages:
       size: 6160035
       nfiles: 10
     - path: src/models/train_model.py
-      md5: a22fafe059604ceb7603f760fcf67f0b
-      size: 2450
+      md5: f51ac94d977ee8dcaf669c78d8e8c16b
+      size: 2827
     params:
       src/params.yaml:
         model:
@@ -35,9 +35,9 @@ stages:
           LEARNING_RATE: 2e-05
     outs:
     - path: models/last_epoch
-      md5: 39e2d688433c29c7789847d29b0ee19f.dir
+      md5: 4cbd484f641bf6fe81040c347fb91748.dir
       size: 18443136
       nfiles: 6
     - path: reports/metrics.json
-      md5: f7438ae4d74ee2830a0a1427915b444c
-      size: 639
+      md5: 354e7e3e84b5f43951afd2cbd14f414d
+      size: 642
