@@ -9,7 +9,7 @@ import numpy as np
 from mlflow import log_metrics, log_artifact
 import mlflow
 
-mlflow.autolog()
+# mlflow.autolog()
 
 class Trainer:
     def __init__(
@@ -60,7 +60,6 @@ class Trainer:
             self.metric.add_batch(predictions=true_predictions, references=true_labels)
 
 
-
     def transform_metrics(self, results: dict) -> dict:
         output = {}
         for k, v in results.items():
@@ -107,8 +106,8 @@ class Trainer:
         with open(results_path, "w") as file:
             self.change_dtype(results)
             json.dump(results, file)
-        log_artifact(output_model_path)
+        # log_artifact(output_model_path)
         mlflow.pytorch.log_model(
             pytorch_model=unwrapped_model,
-            # artifact_path=output_model_path,
+            artifact_path=output_model_path,
         )
